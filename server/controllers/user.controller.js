@@ -26,7 +26,7 @@ const login=async(req,res)=>{
                 return res.status(401).json({message:"Incorrect Password"})
             }
             else{
-                const token=jwt.sign({email:user.email,userId:user._id},process.env.SECRET_KEY)
+                const token=jwt.sign({email:user.email,userId:user._id,role:user.role},process.env.SECRET_KEY)
                 res.status(200).json({message:"Login Successful",user:user,token:token})
             }
         }
@@ -40,4 +40,28 @@ const login=async(req,res)=>{
     }
 }
 
-module.exports={registerUser,login}
+const updateUser=async (req,res)=>{
+    try{
+        const userId=req.params.id
+        const {username,email,mobile}=req.body
+        const updatedData={}
+        if(username) updatedData.username=username
+        if(email) updatedData.email=email
+        if(mobile) updatedData.mobile=mobile
+
+        const result=await User.findByIdAndUpdate(userId,updatedData,{new:true})
+        
+        if(!result){
+            return res.status(400).json({message:"User not found"})
+        }
+        else{
+            return res.status(200).json({message:"User updated successfully",user:result})
+        }
+
+    }
+    catch(err){
+        return res.status(500).json({message:"Something went wrong",error:err.message})
+    }
+}
+
+module.exports={registerUser,login,updateUser}
