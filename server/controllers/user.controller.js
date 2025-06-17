@@ -64,4 +64,51 @@ const updateUser=async (req,res)=>{
     }
 }
 
-module.exports={registerUser,login,updateUser}
+const deleteUser=async (req,res)=>{
+    try{
+        const userId=req.params.id
+        const result=await User.findByIdAndDelete(userId)
+        if(!result){
+            return res.status(400).json({message:"User not found"})
+        }
+        else{
+            return res.status(200).json({message:"User account deleted successfully."})
+        }
+    }
+    catch(err){
+        return res.status(500).json({message:"Something went wrong",error:err.message})
+    }
+}
+
+const updatePassword= async (req,res)=>{
+   try{
+    const userId=req.user.userId
+    const {oldPassword,newPassword}=req.body
+    const existingUser=await User.findById(userId)
+
+    if(!oldPassword) return res.status(400).json({message:"Provide current password"})
+    if(!newPassword) return res.status(400).json({message:"Provide new password"})
+
+    if(existingUser){
+        const validPassword=await bcrypt.compare(oldPassword,existingUser.password)
+        if(validPassword){
+            const hashedPassword=await bcrypt.hash(newPassword,10)
+            existingUser.password=hashedPassword
+            const result=await User.findByIdAndUpdate(userId,existingUser,{new:true})
+            return res.status(200).json({message:"Password Updated Successfully",user:result})
+        }
+        else{
+            return res.status(401).json({message:"Invalid Password"})
+        }
+    }
+    else{
+        return res.status(404).json({message:"User not found."})
+    }
+    
+   }
+   catch(err){
+    return res.status(500).json({message:"Something went wrong.",error:err.message})
+   }
+}
+
+module.exports={registerUser,login,updateUser,deleteUser,updatePassword}
