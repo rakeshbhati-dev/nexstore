@@ -111,4 +111,35 @@ const updatePassword= async (req,res)=>{
    }
 }
 
-module.exports={registerUser,login,updateUser,deleteUser,updatePassword}
+const userProfile=async (req,res)=>{
+    const userId=req.params.id
+    try{
+         const result=await User.findById(userId)
+        if(result){
+            return res.status(200).json({message:"User Found",user:result})
+        }
+        else{
+            return res.status(404).json({message:"User not found"})
+        }
+    }
+    catch(err){
+        res.status(500).json({message:"Something went wrong",error:err.message})
+    }
+}
+
+const getAllUser= async(req,res)=>{
+    try{
+        const allUser=await User.find({role:"user"})
+        if(allUser){
+            return res.status(200).json({message:"User list..",user:allUser})
+        }
+        else{
+            return res.status(404).json({message:"No user available"})
+        }
+    }
+    catch(err){
+        res.status(500).json({message:"Something went wrong",error:err.message})
+    }
+}
+
+module.exports={registerUser,login,updateUser,deleteUser,updatePassword,userProfile,getAllUser}

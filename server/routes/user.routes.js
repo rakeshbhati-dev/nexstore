@@ -1,10 +1,11 @@
 const express=require('express')
 const router=express.Router()
 const authentication=require('../middlewares/auth.middleware')
-const {registerUser,login,updateUser,deleteUser,updatePassword}=require('../controllers/user.controller')
+const isadmin=require('../middlewares/isadmin.middleware')
+const {registerUser,login,updateUser,deleteUser,updatePassword,userProfile,getAllUser}=require('../controllers/user.controller')
 
-// router.get('/')
-// router.get('/:id')
+router.get('/',authentication,isadmin,getAllUser)
+router.get('/:id',authentication,userProfile)
 
 router.post('/register',registerUser)
 router.post('/login',login)
