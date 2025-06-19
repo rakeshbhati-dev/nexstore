@@ -5,6 +5,10 @@ dotenv.config()
 // Connecting to database.
 require('./config/db')
 
+// Adding Admin:
+const addAdmin=require('./controllers/admin.controller')
+addAdmin()
+
 // Invoking express library.
 const express=require('express')
 const app=express()
@@ -17,6 +21,6 @@ app.use('/user',userRouter)
 // Listening server on port
 const PORT=process.env.PORT
 app.listen(PORT,()=>{
-    console.log(`Server is running on PORT ${PORT}`);
+    console.log(`Server is running on PORT ${PORT}`); 
     
 })
