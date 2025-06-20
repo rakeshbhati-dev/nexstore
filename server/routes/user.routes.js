@@ -9,7 +9,7 @@ router.get('/:id',authentication,userProfile)
 
 router.post('/register',registerUser)
 router.post('/login',login)
-// router.post('/logout')
+
 
 router.put('/password',authentication,updatePassword)
 router.put('/:id',authentication,updateUser)

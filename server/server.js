@@ -16,7 +16,9 @@ app.use(express.json())
 
 // Setting up router
 const userRouter=require('./routes/user.routes')
+const categoryRouter=require('./routes/category.routes')
 app.use('/user',userRouter)
+app.use('/category',categoryRouter)
 
 // Listening server on port
 const PORT=process.env.PORT
