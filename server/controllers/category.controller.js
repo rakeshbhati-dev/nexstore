@@ -66,15 +66,18 @@ const updateCategory= async (req,res)=>{
 const deleteCategory = async (req,res)=>{
     const categoryId=req.params.id
     try {
-        const result=await Category.findByIdAndDelete(categoryId)
+        const result=await Category.findById(categoryId)
         if(result){
+            console.log(result);
+            
+           await result.deleteOne()
             res.status(201).json({message:"Category Delete Successfully"})
          }
          else{
             res.status(404).json({message:"No category found."})
          }
     } catch (err) {
-        
+        res.status(501).json({message:"Something went wrong",error:err.message})
     }
 }
 
