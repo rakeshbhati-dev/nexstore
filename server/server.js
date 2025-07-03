@@ -18,9 +18,11 @@ app.use(express.json())
 const userRouter=require('./routes/user.routes')
 const categoryRouter=require('./routes/category.routes')
 const subCategoryRouter=require('./routes/sub-category.routes')
+const productRouter=require('./routes/product.routes')
 app.use('/user',userRouter)
 app.use('/category',categoryRouter)
 app.use('/subcategory',subCategoryRouter)
+app.use('/product',productRouter)
 
 // Listening server on port
 const PORT=process.env.PORT
