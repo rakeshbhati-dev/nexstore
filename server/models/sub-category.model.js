@@ -2,7 +2,7 @@ const mongoose=require('mongoose')
 const Product=require('../models/product.model')
 
 const subCategorySchema=new mongoose.Schema({
-    categoryId:{type:mongoose.Schema.Types.ObjectId,ref:"Category",required:true},
+    category:{type:mongoose.Schema.Types.ObjectId,ref:"Category",required:true},
     title:{type:String,required:true,unique:true}
 })
 

@@ -7,6 +7,6 @@ const categorySchema=new mongoose.Schema({
 })
 
 categorySchema.pre('deleteOne',{ document: true },async function(){
-    await SubCategory.deleteMany({categoryId:this._id})
+    await SubCategory.deleteMany({category:this._id})
 })
 module.exports=mongoose.model("Category",categorySchema)

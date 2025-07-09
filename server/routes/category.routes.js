@@ -6,7 +6,7 @@ const {addCategory,allCategory,findById,updateCategory,deleteCategory}=require('
 router.get('/',allCategory) 
 router.get('/:id',findById) 
 
-router.post('/add',authentication,isAdmin,addCategory)
+router.post('/',authentication,isAdmin,addCategory)
 
 router.put('/:id',authentication,isAdmin,updateCategory)
 router.delete('/:id',authentication,isAdmin,deleteCategory)

@@ -17,7 +17,7 @@ const addSubCatg = async (req, res) => {
         }
         else {
             const result = await SubCategory.create({
-                categoryId: categoryId,
+                category: categoryId,
                 title: title
             })
             return res.status(201).json({ message: "Sub Category added", subCategory: result })
@@ -31,7 +31,7 @@ const addSubCatg = async (req, res) => {
 const findByCategory=async (req,res)=>{
     const {categoryId}=req.params
     try{
-        const subCategory=await SubCategory.find({categoryId:categoryId})
+        const subCategory=await SubCategory.find({category:categoryId})
         if(subCategory.length===0){
             return res.status(404).json({message:"No sub category found"})
         }
