@@ -6,7 +6,7 @@ const {addToCart,getCart,updateCart,deleteCartItem,deleteCart}=require('../contr
  router.get('/',authentication,getCart)
  router.put('/',authentication,updateCart)
  router.delete('/item/:id',authentication,deleteCartItem)
-router.delete('/',authentication,deleteCart)
+ router.delete('/',authentication,deleteCart)
 
 
 module.exports=router

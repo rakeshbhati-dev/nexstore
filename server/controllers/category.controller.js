@@ -68,8 +68,6 @@ const deleteCategory = async (req,res)=>{
     try {
         const result=await Category.findById(categoryId)
         if(result){
-            console.log(result);
-            
            await result.deleteOne()
             res.status(201).json({message:"Category Delete Successfully"})
          }

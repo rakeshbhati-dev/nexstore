@@ -28,7 +28,7 @@ const addToCart = async (req, res) => {
             }
         }
         await cart.save()
-        res.status(201).json({ message: "Cart Updated Successfully", data: cart })
+        res.status(201).json({ message: "Cart Updated Successfully", cart: cart })
     } 
     catch (err) {
         res.status(500).json({message:"Something went wrong",error:err.message})
@@ -39,9 +39,9 @@ const addToCart = async (req, res) => {
 const getCart= async (req,res)=>{
     const {userId}=req.user
     try{
-        const result=await Cart.findOne({userId:userId}).populate('cartItem.productId','prodName prodImage')
+        const result=await Cart.findOne({userId:userId}).populate('cartItem.productId','prodName prodImage price')
         if(result){
-            res.status(200).json({message:"Cart found",data:result})
+            res.status(200).json({message:"Cart found",cart:result})
         }
         else{
             return res.status(404).json({message:"No Cart found"})

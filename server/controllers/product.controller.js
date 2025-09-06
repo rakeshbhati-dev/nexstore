@@ -9,6 +9,7 @@ const addProduct = async (req, res) => {
     try {
         const { filename } = req.file
         const subCatgExist = await SubCategory.findById(subCategory)
+        
         if (!subCatgExist) {
             fs.unlink(req.file.path, (err) => {
                 if (err) {
@@ -40,7 +41,7 @@ const findById = async (req, res) => {
         // console.log(result.subCategoryId.categoryId._id);
 
         if (result) {
-            return res.status(200).json({ message: "Product Found", data: result })
+            return res.status(200).json({ message: "Product Found", product: result })
         }
         else {
             return res.status(404).json({ message: "No product found." })
@@ -52,10 +53,21 @@ const findById = async (req, res) => {
 }
 
 const allProducts = async (req, res) => {
+    const page=parseInt(req.query.page) || 1
+    const limit=parseInt(req.query.limit)||10
+    const skip=(page-1)*limit
+    const search=req.query.search||''
     try {
-        const result = await Product.find().populate({ path: 'subCategory', populate: { path: 'category', select: { title: 1, _id: 0 } }, select: { title: 1, _id: 0 } })
+        const result = await Product.find({
+            $or: [
+        { prodName: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } }
+      ]
+        })
+        .populate({ path: 'subCategory', populate: { path: 'category', select: { title: 1, _id: 0 } }, select: { title: 1, _id: 0 } })
+        .skip(skip).limit(limit)
         if (result) {
-            return res.status(200).json({ message: "Products Found", data: result })
+            return res.status(200).json({ message: "Products Found", product: result, page:page, limit:limit })
         }
         else {
             return res.status(404).json({ message: "No product found." })
@@ -68,10 +80,15 @@ const allProducts = async (req, res) => {
 
 const productBySubCategory = async (req, res) => {
     const subCategoryId = req.params.id
+    const page=parseInt(req.query.page) || 1
+    const limit=parseInt(req.query.limit)||10
+    const skip=(page-1)*limit
     try {
-        const result = await Product.find({ subCategory: subCategoryId }).populate({ path: 'subCategory', select: { title: 1, _id: 0 } })
+        const result = await Product.find({ subCategory: subCategoryId })
+        .populate({ path: 'subCategory', select: { title: 1, _id: 0 } })
+        .skip(skip).limit(limit)
         if (result) {
-            return res.status(200).json({ message: "Product Found", data: result })
+            return res.status(200).json({ message: "Product Found",product:result,page:page,limit:limit })
         }
         else {
             return res.status(404).json({ message: "No Product Found" })
@@ -86,17 +103,19 @@ const productBySubCategory = async (req, res) => {
 
 const updateProduct = async (req, res) => {
     const productId = req.params.id
+    console.log("Hello");
+    
     const { prodName, prodStock, subCategory, description,price } = req.body
-    // prodImage1751646823734-Samsung M21.jpg
     try {
         const existingProduct = await Product.findById(productId)
-        const prodImage = req.file.filename
+        console.log("I am after exist product");
+        let prodImage = req.file?.filename
+        
         const fileExist = fs.existsSync(`uploads/${existingProduct.prodImage}`)
-        if (fileExist) {
-
+        if (fileExist && prodImage) {
             fs.unlinkSync(`uploads/${existingProduct.prodImage}`)
         }
-        const result = await Product.findByIdAndUpdate(productId, { prodName, prodStock, subCategory,price, description, prodImage: prodImage }, { new: true })
+        const result = await Product.findByIdAndUpdate(productId, { prodName, prodStock, subCategory,price, description, prodImage: prodImage?prodImage:existingProduct.prodImage }, { new: true })
         if (result) {
             return res.status(200).json({ message: "Product update successfully", data: result })
         }
@@ -137,4 +156,40 @@ const deleteProduct = async (req, res) => {
     }
 }
 
-module.exports = { addProduct, findById, allProducts, productBySubCategory, updateProduct,deleteProduct }
+const getProductUnder=async (req,res)=>{
+    const prodPrice=Number(req.params.price)
+    const page=parseInt(req.query.page) || 1
+    const limit=parseInt(req.query.limit)||10
+    const skip=(page-1)*limit
+    
+    try {
+        const result=await Product.find({price: {$lt:prodPrice}}).skip(skip).limit(limit)
+        if(result.length>0){
+            return res.status(200).json({message:"Product Found",product:result,page:page,limit:limit})
+        }
+        else{
+            return res.status(404).json({message:"No Product Found",product:null})
+        }
+    } catch (err) {
+       return  res.status(500).json({message:"Something went wrong",error:err.message})
+    }
+}
+
+// router.get('/search', async (req, res) => {
+//   const query = req.query.q;
+//   try {
+//     const products = await Product.find({
+//       $or: [
+//         { name: { $regex: query, $options: 'i' } },
+//         { description: { $regex: query, $options: 'i' } },
+//         { category: { $regex: query, $options: 'i' } },
+//       ]
+//     });
+
+//     res.status(200).json(products);
+//   } catch (error) {
+//     res.status(500).json({ message: 'Error while searching' });
+//   }
+// });
+
+module.exports = { addProduct, findById, allProducts, productBySubCategory, updateProduct,deleteProduct,getProductUnder }

@@ -36,7 +36,7 @@ const findByCategory=async (req,res)=>{
             return res.status(404).json({message:"No sub category found"})
         }
         else{
-            return res.status(200).json({message:"Sub Category found",data:subCategory})
+            return res.status(200).json({message:"Sub Category found",subcategories:subCategory})
         }
     }catch(err){
         res.status(501).json({message:"Something went wrong",error:err.message})
@@ -77,5 +77,20 @@ const deleteSubCategory=async (req,res)=>{
     }
 }
 
+const allSubCategory=async(req,res)=>{
+    try {
+        const result=await SubCategory.find()
+        if(result){
+            return res.status(200).json({message:"All Subcategories",data:result})
+        }
+        else{
+            return res.status(404).json({message:"No Sub Category Exist"})
+        }
+    } catch (err) {
+        return res.status(501).json({message:"Something went wrong",error:err.message})
+    }
+}
 
-module.exports={addSubCatg,findByCategory,deleteSubCategory,findById}
+
+
+module.exports={addSubCatg,findByCategory,deleteSubCategory,findById,allSubCategory}
