@@ -22,4 +22,21 @@ async function deleteUser(token,id) {
     }
 }
 
-export {fetchUser,deleteUser}
+async function updateUser(token,id,data) {
+    try {
+        const response=await axios.put(`${userAPI}/${id}`,data,{headers:{Authorization:`Bearer ${token}`}})
+        return response.data;
+    } catch (error) {
+        throw error
+    }
+}
+
+async function updatePassword(token,oldPassword,newPassword) {
+    try {
+        const response=await axios.put(`${userAPI}/password`,{oldPassword,newPassword},{headers:{Authorization:`Bearer ${token}`}})
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}
+export {fetchUser,deleteUser,updateUser,updatePassword}

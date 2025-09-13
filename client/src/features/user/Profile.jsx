@@ -49,6 +49,10 @@ function Profile() {
         <h3 className='md:w-[20%]  w-[50%] font-semibold'>Mobile No</h3>
         <p>{user.mobile}</p>
       </div>
+      <div className='flex mb-4'>
+        <h3 className='md:w-[20%]  w-[50%] font-semibold'>Password</h3>
+        <Link className='text-violet-700' to='update/password'>Update Password</Link>
+      </div>
       <div className='md:w-[15%] w-[40%] mt-5'>
         <Button value='Delete Account' buttonStyle='text-sm' onClick={deleteHandler}></Button>
       </div>

@@ -10,6 +10,7 @@ import SearchProduct from '../features/product/SearchProduct'
 import UserProtectedRoute from './UserProtectedRoute'
 import Profile from '../features/user/Profile'
 import EditProfile from '../features/user/EditProfile'
+import UpdatePassword from '../features/user/UpdatePassword'
 
 function UserRoutes() {
   return (
@@ -33,6 +34,7 @@ function UserRoutes() {
 
       <Route path='/profile' element={<Profile />} />
       <Route path='/profile/update' element={<EditProfile />} />
+      <Route path='/profile/update/password' element={<UpdatePassword />} />
     </Route>
   )
 }
