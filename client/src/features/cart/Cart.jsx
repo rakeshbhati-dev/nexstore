@@ -9,7 +9,7 @@ import { deleteCartItem } from '../../services/cart'
 import EmptyCart from '../../pages/EmptyCart'
 
 function Cart() {
-  const { cartItem,setCartItem } = useCart()
+  const { cartItem,setCartItem,setCartCount } = useCart()
   const {token}=useUser()
   const [SubTotal, setSubTotal] = useState()
   const [totalItem, setTotalItem] = useState()
@@ -34,14 +34,18 @@ function Cart() {
   }
 
   async function deleteHandler(id) {
-    const filteredCart=cartItem.filter((item)=>item._id!==id)
+    const cnfrm=confirm("Do you want to delete item.")
+    if(cnfrm){
+      const filteredCart=cartItem.filter((item)=>item._id!==id)
     try {
       const response=await deleteCartItem(token,id)
       if(response){
         setCartItem(filteredCart)
+        setCartCount((prev)=>prev-1)
       }
     } catch (error) {
       console.log(error);
+    }
     }
   }
 

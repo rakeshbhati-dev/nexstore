@@ -16,9 +16,7 @@ function CartItem({ item,onDelete }) {
                 setQuantity(qty)
                 const response = await updateCart(item.productId._id, qty, token)
                 if(response){
-                    console.log(response.data.cartItem);
                     const updatedCartItem=cartItem.map((ci)=>ci._id==item._id?{...ci,quantity:qty,totalAmount:totalAmt}:ci)
-                    console.log(updatedCartItem);
                     setCartItem(updatedCartItem)
                 }
             }

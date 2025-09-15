@@ -32,7 +32,7 @@ function ProductList({label,maxPrice,subCategory}) {
           {
             products.map((prod)=>{
               return(
-                <ProductCard product={prod}></ProductCard>
+                <ProductCard product={prod} key={prod._id}></ProductCard>
               )
             })
           }

@@ -16,7 +16,6 @@ export function CartContextProvider({ children }) {
       setCartCount(response.cart.cartItem.length);
       setCartItem(response.cart.cartItem);
     } catch (error) {
-      console.log(error);
       setCartItem(null)
       setCartCount(0)
     }
