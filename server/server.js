@@ -28,6 +28,7 @@ const cartRouter=require('./routes/cart.routes')
 const orderRouter=require('./routes/order.routes')
 const bannerRouter=require('./routes/banner.routes')
 const dashboardRouter=require('./routes/dashboard.routes')
+const addressRouter=require('./routes/address.routes')
 
 app.use('/user',userRouter)
 app.use('/category',categoryRouter)
@@ -37,6 +38,7 @@ app.use('/cart',cartRouter)
 app.use('/order',orderRouter)
 app.use('/banner',bannerRouter)
 app.use('/admin',dashboardRouter)
+app.use('/address',addressRouter)
 
 // Listening server on port
 const PORT=process.env.PORT
