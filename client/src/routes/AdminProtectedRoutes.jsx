@@ -7,7 +7,7 @@ function AdminProtectedRoutes({children}) {
     if(loading){
         return <span className="loading loading-spinner loading-xs"></span>
     }
-    if(user.role=='admin' && !loading){
+    if(user?.role=='admin' && !loading){
         return (children)
     }
   else{

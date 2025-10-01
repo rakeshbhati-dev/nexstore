@@ -2,7 +2,7 @@ const User=require('../models/user.model')
 const bcrypt=require('bcrypt')
 
 const addAdmin=async (req,res)=>{
-    const isAdmin=await User.findById(process.env.ADMIN_ID)
+    const isAdmin=await User.findOne({role:"admin"})
     if(!isAdmin){
         const hashedPassword=await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
         await User.create({
